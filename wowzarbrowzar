@@ -89,16 +89,20 @@ def set_as_default_browser():
 
 
 def configure_browsers():
+    print("Scanning for all installed applications which handle websites...")
     avail_browsers = Gio.app_info_get_recommended_for_type("text/html")
     use = []
+    print("Done!")
 
-    print("Select from known browsers. yes/no/done/quit")
+    print("Select the applications to add to the switcher")
     for browser in avail_browsers:
         # Don't add ourselves as an option!
         if "Wowzarbrowzar" in browser.get_display_name():
             continue
 
-        a = input("Use '%s' y/n/d/q?" % browser.get_display_name())
+        a = input("  Add '%s' (yes/no/done/quit) y/n/d/q?: " %
+                  browser.get_display_name())
+
         if "q" in a:
             return
 
@@ -131,10 +135,11 @@ def main():
                         dest="set_default",
                         action="store_true")
 
-    parser.add_argument("--configure-browsers",
-                        help="Configure the browsers to have as options",
-                        dest="configure_browsers",
-                        action="store_true")
+    parser.add_argument(
+        "--configure-browsers",
+        help="Configure the browsers/applications to have as switcher options",
+        dest="configure_browsers",
+        action="store_true")
 
     parser.add_argument("url", help="The url to open", nargs="?",
                         default="about:blank")
